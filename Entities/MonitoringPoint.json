@@ -1,0 +1,79 @@
+{
+  "name": "MonitoringPoint",
+  "type": "object",
+  "properties": {
+    "nome": {
+      "type": "string",
+      "description": "Nome do ponto de monitoramento"
+    },
+    "regiao": {
+      "type": "string",
+      "enum": [
+        "Amazônia",
+        "Cerrado",
+        "Mata Atlântica",
+        "Caatinga",
+        "Pantanal",
+        "Pampa"
+      ],
+      "description": "Bioma brasileiro"
+    },
+    "estado": {
+      "type": "string",
+      "description": "Estado brasileiro"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitude do ponto"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitude do ponto"
+    },
+    "temperatura": {
+      "type": "number",
+      "description": "Temperatura em graus Celsius"
+    },
+    "nivel_fumaca": {
+      "type": "number",
+      "description": "Nível de fumaça (0-100)"
+    },
+    "umidade": {
+      "type": "number",
+      "description": "Umidade relativa do ar (%)"
+    },
+    "velocidade_vento": {
+      "type": "number",
+      "description": "Velocidade do vento em km/h"
+    },
+    "nivel_risco": {
+      "type": "string",
+      "enum": [
+        "baixo",
+        "medio",
+        "alto",
+        "critico"
+      ],
+      "description": "Nível de risco calculado"
+    },
+    "data_medicao": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora da medição"
+    },
+    "ativo": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se o ponto está ativo"
+    }
+  },
+  "required": [
+    "nome",
+    "regiao",
+    "latitude",
+    "longitude",
+    "temperatura",
+    "nivel_fumaca",
+    "nivel_risco"
+  ]
+}
