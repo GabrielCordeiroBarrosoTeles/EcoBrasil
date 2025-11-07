@@ -1,0 +1,7 @@
+# Arquivos de modelo treinado
+*.pt
+
+# Manter a pasta mas ignorar os modelos
+!.gitkeep
+
+

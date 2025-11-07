@@ -1,0 +1,2 @@
+id,titulo,status,nivel_criticidade,tipo,descricao,regiao,estado,data_inicio,recomendacoes,data_fim,created_at
+1,Risco Elevado de Incêndio no Cerrado,ativo,alto,risco_incendio,"Análise de dados meteorológicos indica baixa umidade e altas temperaturas, elevando o risco de incêndios espontâneos.",Cerrado,Goiás,2025-10-15 23:21:11+00,Aumentar o monitoramento por satélite e alertar brigadas locais.,,2025-10-15 23:30:06.982956+00

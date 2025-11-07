@@ -1,0 +1,17 @@
+curl 'https://api.cohere.ai/v1/chat' \
+  -H 'accept: */*' \
+  -H 'accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'authorization: Bearer GnUGJttizmuaXGY5ABxkyfm6e3GUDN4axAbKANsy' \
+  -H 'content-type: application/json' \
+  -H 'dnt: 1' \
+  -H 'origin: http://localhost:3000' \
+  -H 'priority: u=1, i' \
+  -H 'referer: http://localhost:3000/' \
+  -H 'sec-ch-ua: "Chromium";v="141", "Not?A_Brand";v="8"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: cross-site' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36' \
+  --data-raw '{"model":"command-a-03-2025","message":"\nVocê é um especialista em análise ambiental e previsão de riscos de incêndios florestais no Brasil.\n\nAnalise os seguintes dados de monitoramento da região Amazônia:\n\n[\n  {\n    \"nome\": \"Foco #41349\",\n    \"temperatura\": 44.9,\n    \"nivel_fumaca\": 56,\n    \"umidade\": 49,\n    \"velocidade_vento\": 15.5,\n    \"nivel_risco\": \"medio\"\n  },\n  {\n    \"nome\": \"Foco #41385\",\n    \"temperatura\": 32.2,\n    \"nivel_fumaca\": 88,\n    \"umidade\": 46,\n    \"velocidade_vento\": 8.2,\n    \"nivel_risco\": \"alto\"\n  },\n  {\n    \"nome\": \"Foco #41325\",\n    \"temperatura\": 44.7,\n    \"nivel_fumaca\": 77,\n    \"umidade\": 54,\n    \"velocidade_vento\": 14.3,\n    \"nivel_risco\": \"alto\"\n  },\n  {\n    \"nome\": \"Foco #41316\",\n    \"temperatura\": 31.8,\n    \"nivel_fumaca\": 64,\n    \"umidade\": 22,\n    \"velocidade_vento\": 20.3,\n    \"nivel_risco\": \"baixo\"\n  },\n  {\n    \"nome\": \"Foco #41388\",\n    \"temperatura\": 36.4,\n    \"nivel_fumaca\": 42,\n    \"umidade\": 32,\n    \"velocidade_vento\": 21.8,\n    \"nivel_risco\": \"critico\"\n  },\n  {\n    \"nome\": \"Foco #41390\",\n    \"temperatura\": 32.2,\n    \"nivel_fumaca\": 71,\n    \"umidade\": 21,\n    \"velocidade_vento\": 12.4,\n    \"nivel_risco\": \"medio\"\n  },\n  {\n    \"nome\": \"Foco #41308\",\n    \"temperatura\": 44.6,\n    \"nivel_fumaca\": 89,\n    \"umidade\": 43,\n    \"velocidade_vento\": 9.4,\n    \"nivel_risco\": \"alto\"\n  },\n  {\n    \"nome\": \"Foco #41361\",\n    \"temperatura\": 30,\n    \"nivel_fumaca\": 93,\n    \"umidade\": 38,\n    \"velocidade_vento\": 14.9,\n    \"nivel_risco\": \"baixo\"\n  }\n]\n\nCom base nesses dados, forneça um objeto JSON com as seguintes chaves:\n1. \"analise_riscos\": Uma análise detalhada dos riscos atuais.\n2. \"probabilidade_incendio\": Previsão de probabilidade (um número de 0 a 100) de incêndios nas próximas 72 horas.\n3. \"areas_preocupacao\": Um array de objetos, onde cada objeto contém \"area\", \"nivel_risco\" e \"motivo\".\n4. \"recomendacoes\": Um array de strings com recomendações específicas para prevenção e resposta.\n5. \"nivel_criticidade\": O nível de criticidade geral (uma string: \"baixo\", \"medio\", \"alto\", ou \"critico\").\n\nResponda APENAS com o objeto JSON solicitado, sem nenhum texto, explicação ou formatação adicional.\n\n\nResponda APENAS com o objeto JSON solicitado, sem nenhum texto, explicação ou formatação adicional. O JSON deve começar com `{` e terminar com `}`."}'

@@ -20,13 +20,53 @@ interface InvokeLLMOptions {
   response_json_schema: any;
 }
 
+// Dados locais para fallback
+const localAlerts = [
+  {
+    id: 1,
+    titulo: "Risco Crítico Detectado - Amazônia",
+    status: "ativo",
+    nivel_criticidade: "critico",
+    tipo: "risco_incendio",
+    descricao: "Foco #2 na Amazônia apresenta nível crítico com alta concentração de fumaça (87%).",
+    regiao: "Amazônia",
+    estado: "MARANHÃO",
+    data_inicio: "2025-03-10T00:00:00Z",
+    created_date: "2025-03-10T00:00:00Z",
+    recomendacoes: "Mobilizar equipes de emergência.",
+    data_fim: null,
+  },
+  {
+    id: 2,
+    titulo: "Múltiplos Focos - Cerrado",
+    status: "monitorando",
+    nivel_criticidade: "alto",
+    tipo: "multiplos_focos",
+    descricao: "Detectados múltiplos focos na região do Cerrado.",
+    regiao: "Cerrado",
+    estado: "MARANHÃO",
+    data_inicio: "2025-03-10T00:00:00Z",
+    created_date: "2025-03-10T00:00:00Z",
+    recomendacoes: "Aumentar monitoramento.",
+    data_fim: null,
+  }
+];
+
+const localMonitoringPoints = [
+  { id: 1, nome: "Foco #1", regiao: "Cerrado", umidade: 20, velocidade_vento: 9.4, temperatura: 31.4, nivel_fumaca: 30, nivel_risco: "baixo", data_medicao: "2025-03-10T00:00:00Z", estado: "PIAUÍ" },
+  { id: 2, nome: "Foco #2", regiao: "Amazônia", umidade: 54, velocidade_vento: 5.9, temperatura: 33.6, nivel_fumaca: 87, nivel_risco: "critico", data_medicao: "2025-03-10T00:00:00Z", estado: "MARANHÃO" },
+  { id: 3, nome: "Foco #3", regiao: "Cerrado", umidade: 44, velocidade_vento: 15.8, temperatura: 39.2, nivel_fumaca: 60, nivel_risco: "baixo", data_medicao: "2025-03-10T00:00:00Z", estado: "MARANHÃO" },
+  { id: 4, nome: "Foco #4", regiao: "Cerrado", umidade: 50, velocidade_vento: 6.8, temperatura: 31.2, nivel_fumaca: 73, nivel_risco: "baixo", data_medicao: "2025-03-10T00:00:00Z", estado: "TOCANTINS" },
+  { id: 5, nome: "Foco #5", regiao: "Pantanal", umidade: 23, velocidade_vento: 8.8, temperatura: 37, nivel_fumaca: 70, nivel_risco: "baixo", data_medicao: "2025-03-10T00:00:00Z", estado: "MATO GROSSO DO SUL" }
+];
+
 // Helper function to handle network errors
-const handleNetworkError = (error: any, context: string) => {
+const handleNetworkError = (error: any, context: string, fallbackData: any[]) => {
   console.error(`❌ Erro na requisição (${context}):`, error);
   
-  if (error?.message?.includes('Failed to fetch') || error?.code === 'ERR_NAME_NOT_RESOLVED') {
-    console.error("🔴 Problema de conectividade com o Supabase. Verifique sua conexão com a internet.");
-    return { data: [], error: 'CONNECTION_ERROR' };
+  if (error?.message?.includes('Failed to fetch') || error?.code === 'ERR_NAME_NOT_RESOLVED' || error?.message?.includes('NetworkError')) {
+    console.warn("🔴 Problema de conectividade com o Supabase. Usando dados locais...");
+    return { data: fallbackData, error: 'CONNECTION_ERROR', usingLocalData: true };
   }
   
   throw error;
@@ -46,7 +86,11 @@ export const base44 = {
           console.log("✅ Alertas encontrados:", data?.length || 0);
           return data?.map(item => ({ ...item, created_date: item.created_at })) || [];
         } catch (error: any) {
-          return handleNetworkError(error, 'Alertas').data;
+          const result = handleNetworkError(error, 'Alertas', localAlerts);
+          if (result.usingLocalData) {
+            console.log("📱 Usando dados locais de alertas");
+          }
+          return result.data;
         }
       },
       update: async (id: string | number, updateData: any) => {
@@ -68,7 +112,11 @@ export const base44 = {
           console.log("📊 Primeiros dados:", data?.slice(0, 2));
           return data || [];
         } catch (error: any) {
-          return handleNetworkError(error, 'MonitoringPoints').data;
+          const result = handleNetworkError(error, 'MonitoringPoints', localMonitoringPoints);
+          if (result.usingLocalData) {
+            console.log("📱 Usando dados locais de pontos de monitoramento");
+          }
+          return result.data;
         }
       }
     }

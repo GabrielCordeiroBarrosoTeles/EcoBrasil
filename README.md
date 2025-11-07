@@ -19,6 +19,87 @@ Este projeto foi construído como um protótipo funcional completo, demonstrando
 
 ---
 
+## 🧮 Fórmula Matemática da IA de Análise de Riscos
+
+A API Python utiliza uma fórmula matemática otimizada para calcular a probabilidade de incêndio baseada em dados meteorológicos:
+
+### Fórmula Base do Índice de Risco
+
+```
+Índice de Risco = (T_norm × H_risk × S_norm × W_norm) × Pesos
+```
+
+Onde:
+- **T_norm** = Temperatura normalizada
+- **H_risk** = Risco de umidade (invertido)
+- **S_norm** = Nível de fumaça normalizado
+- **W_norm** = Velocidade do vento normalizada
+
+### Normalização dos Parâmetros
+
+**Temperatura:**
+```
+T_norm = min(Temperatura / 50, 1.0)
+```
+
+**Umidade (invertida):**
+```
+H_risk = 1 - (Umidade / 100)
+```
+
+**Nível de Fumaça:**
+```
+S_norm = Nível_Fumaça / 100
+```
+
+**Velocidade do Vento:**
+```
+W_norm = min(Velocidade_Vento / 30, 1.0)
+```
+
+### Pesos Atribuídos
+
+O sistema utiliza pesos otimizados baseados na importância de cada fator:
+
+- **Temperatura**: `0.4` (40% - fator crítico)
+- **Umidade**: `0.3` (30% - baixa umidade aumenta risco)
+- **Nível de Fumaça**: `0.2` (20% - concentração de partículas)
+- **Velocidade do Vento**: `0.1` (10% - potencial de propagação)
+
+### Cálculo da Probabilidade Final
+
+A probabilidade final é calculada usando estatística descritiva:
+
+```
+Probabilidade = min(Média_Índices + Ajuste_Bayesiano, 100)
+```
+
+**Ajuste Bayesiano:**
+```
+Ajuste = (Pontos_Críticos/Total × 15) + (Pontos_Alto_Risco/Total × 10) + Bonus_P75
+```
+
+Onde:
+- **Bonus_P75** = +2 se Percentil_75 > 80
+
+### Processamento Vetorizado
+
+Para otimização de performance, a API utiliza operações vetorizadas com NumPy:
+
+```python
+# Normalização vetorizada
+temp_norm = np.clip(temps / 50, 0, 1)
+humidity_risk = 1 - (humidities / 100)
+smoke_norm = smokes / 100
+wind_norm = np.clip(winds / 30, 0, 1)
+
+# Cálculo matricial dos índices
+features = np.column_stack([temp_norm, humidity_risk, smoke_norm, wind_norm])
+risk_indices = np.dot(features, weights) * 100
+```
+
+---
+
 ## 🚀 Tecnologias Utilizadas
 
 Este projeto foi construído com as seguintes tecnologias:
