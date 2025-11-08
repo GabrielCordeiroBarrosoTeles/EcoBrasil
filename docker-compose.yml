@@ -1,41 +1,29 @@
-version: '3.8'
-
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: ecomonitor_mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ecomonitor123
-      MYSQL_DATABASE: ecomonitor
-      MYSQL_USER: ecouser
-      MYSQL_PASSWORD: ecopass123
+  # Novo Backend FastAPI
+  backend:
+    build: ./backend
     ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - ecomonitor_network
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: ecomonitor_phpmyadmin
-    restart: always
-    ports:
-      - "8080:80"
+      - "8000:8000"
     environment:
-      PMA_HOST: mysql
-      PMA_USER: ecouser
-      PMA_PASSWORD: ecopass123
+      - DATABASE_URL=postgresql://ecouser:ecopass@db:5432/ecomonitor
     depends_on:
-      - mysql
-    networks:
-      - ecomonitor_network
+      - db
+    volumes:
+      - ./backend:/app
+      - ./database:/database
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Database PostgreSQL
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=ecomonitor
+      - POSTGRES_USER=ecouser
+      - POSTGRES_PASSWORD=ecopass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
-
-networks:
-  ecomonitor_network:
-    driver: bridge
+  postgres_data:
