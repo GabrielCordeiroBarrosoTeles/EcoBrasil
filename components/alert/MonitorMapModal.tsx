@@ -99,9 +99,9 @@ export function MonitorMapModal({
     <Dialog
       open={open}
       onOpenChange={(value) => !value && onClose()}
-      containerClassName="w-full max-w-6xl sm:max-w-7xl"
+      containerClassName="w-full max-w-7xl"
     >
-      <DialogContent className="w-full max-w-none p-0">
+      <DialogContent className="w-full max-w-7xl overflow-y-auto rounded-3xl p-0 sm:w-[calc(100vw-2rem)] sm:max-h-[calc(100vh-4rem)]">
         <DialogHeader className="space-y-2 px-6 pt-6 lg:px-10">
           <DialogTitle className="flex items-center justify-between text-base font-semibold">
             <span>Visualizar localização do alerta</span>
