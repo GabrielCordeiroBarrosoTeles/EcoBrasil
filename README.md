@@ -127,52 +127,47 @@ flowchart LR
 <details>
 <summary><strong>🧮 Ensemble de modelos</strong></summary>
 
-1. **Fire Weather Index (FWI)**
+### 1. Fire Weather Index (FWI)
 
-   $$
-   \text{FWI} = 2.0 \cdot \ln(\text{ISI} + 1) + 0.45 \cdot (\text{BUI} - 50)
-   $$
+![FWI](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}FWI%20=%202.0%20\cdot%20\ln(ISI%20+%201)%20+%200.45%20\cdot%20(BUI%20-%2050))
 
-   - `ISI` depende da velocidade do vento.
-   - `BUI` combina umidade e temperatura (FFMC, DMC, DC).
+- `ISI`: depende da velocidade do vento  
+- `BUI`: combina umidade e temperatura (FFMC, DMC, DC)
 
-2. **Índice Haines**
+---
 
-   $$
-   H = (T_{850} - T_{700}) + (T_{850} - T_{d,850})
-   $$
+### 2. Índice Haines
 
-   Mede a instabilidade atmosférica em níveis médios.
+![Haines](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}H%20=%20(T_{850}%20-%20T_{700})%20+%20(T_{850}%20-%20T_{d,850}))
 
-3. **Modelo logístico sazonal**
+Mede a instabilidade atmosférica em níveis médios.
 
-   $$
-   z = -2.5 + 3.2\frac{T}{50} + 2.8\left(1-\frac{U}{100}\right) + 1.5\frac{F}{100} + 0.8\frac{V}{30} + 1.2 (S - 1)
-   $$
+---
 
-   $$
-   P_{\text{log}} = \frac{1}{1 + e^{-z}} \times 100
-   $$
+### 3. Modelo logístico sazonal
 
-   - \(T\): temperatura °C
-   - \(U\): umidade relativa %
-   - \(F\): nível de fumaça %
-   - \(V\): velocidade do vento km/h
-   - \(S\): fator sazonal
+![z](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}z%20=%20-2.5%20+%203.2\frac{T}{50}%20+%202.8(1-\frac{U}{100})%20+%201.5\frac{F}{100}%20+%200.8\frac{V}{30}%20+%201.2(S-1))
+  
+![Plog](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}P_{log}%20=%20\frac{1}{1%20+%20e^{-z}}%20\times%20100)
 
-4. **Ensemble final**
+- `T`: temperatura (°C)  
+- `U`: umidade relativa (%)  
+- `F`: nível de fumaça (%)  
+- `V`: velocidade do vento (km/h)  
+- `S`: fator sazonal  
 
-   $$
-   P_{\text{final}} = \min\left(100,\;0.4 P_{\text{log}} + 0.3 (10 \cdot \text{FWI}) + 0.3 (16.67 \cdot H) + \Delta\right)
-   $$
+---
 
-   $$
-   \Delta = 15 \cdot \frac{N_{\text{crit}}}{N_{\text{total}}} + 8 \cdot \frac{N_{\text{alto}}}{N_{\text{total}}}
-   $$
+### 4. Ensemble final
 
-Esses valores alimentam a página **Análise Preditiva** e o **dashboard**.
+![Pfinal](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}P_{final}%20=%20\min(100,%200.4P_{log}%20+%200.3(10%20\cdot%20FWI)%20+%200.3(16.67%20\cdot%20H)%20+%20\Delta))
+  
+![Delta](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}\Delta%20=%2015%20\cdot%20\frac{N_{crit}}{N_{total}}%20+%208%20\cdot%20\frac{N_{alto}}{N_{total}})
+
+Esses valores alimentam a página **Análise Preditiva** e o **Dashboard**.
 
 </details>
+
 
 ---
 
