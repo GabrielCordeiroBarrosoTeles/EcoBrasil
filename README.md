@@ -108,7 +108,7 @@ O **EcoMonitor** é um sistema web completo para monitorar focos de incêndio, g
 
 ```mermaid
 flowchart LR
-    U[Usuário<br/>Browser] -->|HTTP/HTTPS| F[Frontend<br/>Next.js 14]
+    U[Usuário no browser] -->|HTTP/HTTPS| F[Frontend<br/>Next.js 14]
     F -->|REST /api/v1| B[Backend<br/>FastAPI]
     B -->|SQLAlchemy ORM| DB[(PostgreSQL)]
     B -->|dados para inferência| AI[AI Engine<br/>FWI + Haines + Logístico]
@@ -128,26 +128,31 @@ flowchart LR
 <summary><strong>🧮 Ensemble de modelos</strong></summary>
 
 1. **Fire Weather Index (FWI)**
-   \[
-   \text{FWI} = 2.0 \cdot \ln(\text{ISI} + 1) + 0.45 \cdot (\text{BUI} - 50)
-   \]
 
-   - ISI depende da velocidade do vento
-   - BUI combina umidade e temperatura (FFMC, DMC, DC)
+   $$
+   \text{FWI} = 2.0 \cdot \ln(\text{ISI} + 1) + 0.45 \cdot (\text{BUI} - 50)
+   $$
+
+   - `ISI` depende da velocidade do vento.
+   - `BUI` combina umidade e temperatura (FFMC, DMC, DC).
 
 2. **Índice Haines**
-   \[
-   H = (T*{850} - T*{700}) + (T*{850} - T*{d,850})
-   \]
-   Mede instabilidade atmosférica em níveis médios.
+
+   $$
+   H = (T_{850} - T_{700}) + (T_{850} - T_{d,850})
+   $$
+
+   Mede a instabilidade atmosférica em níveis médios.
 
 3. **Modelo logístico sazonal**
-   \[
-   z = -2.5 + 3.2\frac{T}{50} + 2.8\Big(1-\frac{U}{100}\Big) + 1.5\frac{F}{100} + 0.8\frac{V}{30} + 1.2 (S - 1)
-   \]
-   \[
-   P\_{\text{log}} = \frac{1}{1 + e^{-z}} \times 100
-   \]
+
+   $$
+   z = -2.5 + 3.2\frac{T}{50} + 2.8\left(1-\frac{U}{100}\right) + 1.5\frac{F}{100} + 0.8\frac{V}{30} + 1.2 (S - 1)
+   $$
+
+   $$
+   P_{\text{log}} = \frac{1}{1 + e^{-z}} \times 100
+   $$
 
    - \(T\): temperatura °C
    - \(U\): umidade relativa %
@@ -156,14 +161,16 @@ flowchart LR
    - \(S\): fator sazonal
 
 4. **Ensemble final**
-   \[
-   P*{\text{final}} = \min\Big(100,\;0.4 P*{\text{log}} + 0.3 (10 \cdot FWI) + 0.3 (16.67 \cdot H) + \Delta\Big)
-   \]
-   \[
-   \Delta = 15 \cdot \frac{N*{\text{crit}}}{N*{\text{total}}} + 8 \cdot \frac{N*{\text{alto}}}{N*{\text{total}}}
-   \]
 
-O resultado alimenta a página **Análise Preditiva** e o **dashboard**.
+   $$
+   P_{\text{final}} = \min\left(100,\;0.4 P_{\text{log}} + 0.3 (10 \cdot \text{FWI}) + 0.3 (16.67 \cdot H) + \Delta\right)
+   $$
+
+   $$
+   \Delta = 15 \cdot \frac{N_{\text{crit}}}{N_{\text{total}}} + 8 \cdot \frac{N_{\text{alto}}}{N_{\text{total}}}
+   $$
+
+Esses valores alimentam a página **Análise Preditiva** e o **dashboard**.
 
 </details>
 
