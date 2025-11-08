@@ -1,364 +1,216 @@
-# 🌿 EcoMonitor: Sistema Preditivo de Riscos Ambientais
+# 🌿 EcoMonitor — Plataforma Preditiva de Riscos Ambientais
 
-## 📋 Sobre o Projeto
+O **EcoMonitor** é um sistema web completo para monitorar focos de incêndio, gerar análises preditivas e apoiar a tomada de decisão com base em dados ambientais. A solução combina:
 
-O **EcoMonitor** é uma plataforma web moderna para monitoramento, análise e previsão de riscos de incêndios florestais no Brasil. Utiliza dados geoespaciais reais (INPE) integrados com Inteligência Artificial para análises preditivas precisas.
-
-### ✨ Funcionalidades
-
-- 🔥 **Análise Preditiva de Incêndios** - Probabilidade de incêndio nas próximas 72h
-- 📊 **Dashboard Interativo** - Visualização em tempo real de estatísticas
-- 🗺️ **Mapas Geoespaciais** - Localização e intensidade dos focos
-- 📈 **Histórico de Alertas** - Análise de tendências e padrões
-- 🤖 **IA Avançada** - Ensemble de modelos científicos (FWI + Haines + Logístico)
+- Frontend **Next.js 14 (App Router) + React Query + Tailwind**
+- Backend **FastAPI** com orquestração via **Docker Compose**
+- Banco de dados **PostgreSQL**
+- Motor de IA com ensemble de modelos científicos (FWI, Haines e regressão logística)
 
 ---
 
-## 📋 Pré-requisitos
+## 🚀 Comece em poucos minutos
 
 <details>
-<summary><strong>🖥️ O que precisa estar instalado na máquina</strong></summary>
+<summary><strong>✅ Passo a passo rápido</strong></summary>
 
-### **Obrigatório:**
+1. **Clone o repositório**
 
-- **Docker Desktop** (v20.10+)
+   ```bash
+   git clone <url-do-repositorio>
+   cd EcoBrasil
+   ```
 
-  - Windows: [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  - macOS: [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  - Linux: `sudo apt install docker.io docker-compose`
+2. **Instale as dependências do frontend**
 
-- **Node.js** (v16+)
-
-  - [Download Node.js](https://nodejs.org/)
-  - Verificar: `node --version`
-
-- **Git**
-  - Windows: [Download Git](https://git-scm.com/)
-  - macOS: `brew install git`
-  - Linux: `sudo apt install git`
-
-### **Opcional (para desenvolvimento):**
-
-- **Python** (v3.11+) - apenas se quiser rodar backend local
-- **PostgreSQL** - apenas se não usar Docker
-- **VS Code** - editor recomendado
-
-</details>
-
-<details>
-<summary><strong>🔧 Instalação e Configuração</strong></summary>
-
-### **1. Clonar o Repositório**
-
-```bash
-git clone <url-do-repositorio>
-cd EcoBrasil
-```
-
-### **2. Verificar Pré-requisitos**
-
-```bash
-# Verificar Docker
-docker --version
-docker-compose --version
-
-# Verificar Node.js
-node --version
-npm --version
-```
-
-### **3. Instalar Dependências**
-
-```bash
-# Instalar dependências do frontend
-npm install
-```
-
-### **4. Configurar Ambiente**
-
-```bash
-# Criar arquivo de configuração
-cp .env.example .env
-```
-
-### **5. Inicializar Docker**
-
-- **Windows/macOS**: Abrir Docker Desktop
-- **Linux**: `sudo systemctl start docker`
-
-</details>
-
-<details>
-<summary><strong>🚀 Executar o Sistema</strong></summary>
-
-### **Método 1 - Script Automático (Recomendado)**
-
-```bash
-./start.sh
-```
-
-### **Método 2 - Docker Compose**
-
-```bash
-docker-compose up -d
-```
-
-### **Método 3 - NPM**
-
-```bash
-npm run dev
-```
-
-### **Verificar se está funcionando:**
-
-- ✅ Frontend: http://localhost:3000
-- ✅ API: http://localhost:8000/docs
-- ✅ Health: http://localhost:8000/health
-
-</details>
-
-<details>
-<summary><strong>🛠️ Solução de Problemas</strong></summary>
-
-### **Docker não inicia:**
-
-```bash
-# Verificar se Docker está rodando
-docker info
-
-# Reiniciar Docker (Linux)
-sudo systemctl restart docker
-```
-
-### **Porta em uso:**
-
-```bash
-# Ver o que está usando a porta
-lsof -i :3000
-lsof -i :8000
-
-# Matar processo
-kill -9 <PID>
-```
-
-### **Erro de permissão (Linux):**
-
-```bash
-# Adicionar usuário ao grupo docker
-sudo usermod -aG docker $USER
-# Fazer logout/login
-```
-
-### **Limpar containers:**
-
-```bash
-docker-compose down
-docker system prune -f
-```
-
-</details>
-
-## 🚀 Execução Rápida
-
-<details>
-<summary><strong>✅ Como subir tudo (frontend + backend + banco)</strong></summary>
-
-1. **Instale as dependências do frontend (uma vez):**
    ```bash
    npm install
    ```
-2. **Suba o backend FastAPI + PostgreSQL (Docker):**
+
+3. **Suba backend + banco com Docker**
+
    ```bash
    ./start.sh
    ```
-   - API disponível em `http://localhost:8000`
-   - Banco exposto em `localhost:5432`
-3. **(Opcional, primeira vez)** popular o banco com dados históricos:
+
+   - API: `http://localhost:8000`
+   - Docs (Swagger): `http://localhost:8000/docs`
+   - Banco: `localhost:5432`
+
+4. **(Opcional – primeira carga)** Migre os dados históricos:
+
    ```bash
    docker-compose exec backend python migrate_data.py
    ```
-4. **Rode o frontend Next.js em modo dev:**
+
+5. **Rode o frontend Next.js**
+
    ```bash
    npm run dev
    ```
-   - Interface disponível em `http://localhost:3000`
 
-Para desligar:
+   - Interface: `http://localhost:3000`
 
-```bash
-docker-compose down --remove-orphans
-```
+6. **Encerrar serviços**
+   ```bash
+   docker-compose down --remove-orphans
+   ```
+
+</details>
+
+---
+
+## 🖥️ Requisitos
+
+<details>
+<summary><strong>📦 Software necessário</strong></summary>
+
+- **Docker Desktop** 20.10+
+- **Node.js** 18+ (recomendado 20+)
+- **Git**
+
+<em>O Python 3.11 é necessário apenas se você quiser executar o backend fora do Docker.</em>
 
 </details>
 
 <details>
-<summary><strong>🧭 Fluxo do Sistema (Mermaid)</strong></summary>
+<summary><strong>🛠️ Solução de problemas comuns</strong></summary>
+
+- **Docker não inicia**
+  ```bash
+  docker info
+  sudo systemctl restart docker   # Linux
+  ```
+- **Porta em uso**
+  ```bash
+  lsof -i :3000
+  lsof -i :8000
+  kill -9 <PID>
+  ```
+- **Permissões no Docker (Linux)**
+  ```bash
+  sudo usermod -aG docker $USER
+  ```
+- **Reset rápido**
+  ```bash
+  docker-compose down --remove-orphans
+  docker system prune -f
+  ```
+
+</details>
+
+---
+
+## 🧭 Fluxo do sistema
+
+<details>
+<summary><strong>🔀 Diagrama Mermaid</strong></summary>
 
 ```mermaid
 flowchart LR
-    U[Usuário no Browser] -->|HTTP (Next.js)| F[Frontend
-Next 14]
-    F -->|REST /api/v1| B[Backend
-FastAPI]
-    B -->|SQLAlchemy| DB[(PostgreSQL)]
-    B -->|Dados de monitoramento| AI[AIEngine]
-    AI --> DB
-    AI --> B
+    U[Usuário<br/>Browser] -->|HTTP/HTTPS| F[Frontend<br/>Next.js 14]
+    F -->|REST /api/v1| B[Backend<br/>FastAPI]
+    B -->|SQLAlchemy ORM| DB[(PostgreSQL)]
+    B -->|dados para inferência| AI[AI Engine<br/>FWI + Haines + Logístico]
+    AI -->|consulta histórica| DB
+    AI -->|probabilidades| B
     B -->|JSON| F
+    F -->|UI & dashboards| U
 ```
 
 </details>
 
+---
+
+## 🔬 Como a análise preditiva funciona
+
 <details>
-<summary><strong>🧮 Metodologia da Análise Preditiva</strong></summary>
+<summary><strong>🧮 Ensemble de modelos</strong></summary>
 
-A probabilidade final de incêndio é calculada via ensemble de três modelos:
-
-1. **Fire Weather Index (FWI):**
+1. **Fire Weather Index (FWI)**
    \[
    \text{FWI} = 2.0 \cdot \ln(\text{ISI} + 1) + 0.45 \cdot (\text{BUI} - 50)
    \]
 
-   - ISI (Initial Spread Index) depende da velocidade do vento.
-   - BUI (Build-Up Index) combina umidade e temperatura (via FFMC, DMC, DC).
+   - ISI depende da velocidade do vento
+   - BUI combina umidade e temperatura (FFMC, DMC, DC)
 
-2. **Índice Haines:**
+2. **Índice Haines**
    \[
    H = (T*{850} - T*{700}) + (T*{850} - T*{d,850})
    \]
    Mede instabilidade atmosférica em níveis médios.
 
-3. **Modelo logístico sazonal:**
+3. **Modelo logístico sazonal**
    \[
-   z = -2.5 + 3.2\frac{T}{50} + 2.8 (1-\frac{U}{100}) + 1.5\frac{F}{100} + 0.8\frac{V}{30} + 1.2 (S - 1)
+   z = -2.5 + 3.2\frac{T}{50} + 2.8\Big(1-\frac{U}{100}\Big) + 1.5\frac{F}{100} + 0.8\frac{V}{30} + 1.2 (S - 1)
    \]
    \[
-   P\_{log} = \frac{1}{1 + e^{-z}} \times 100
-   \]
-   Onde:
-
-   - \(T\): temperatura (°C)
-   - \(U\): umidade relativa (%)
-   - \(F\): nível de fumaça (%)
-   - \(V\): velocidade do vento (km/h)
-   - \(S\): fator sazonal (mês atual)
-
-4. **Ensemble + ajuste por criticidade:**
-   \[
-   P*{final} = \min\Big(100,\;0.4 P*{log} + 0.3 (10\cdot FWI) + 0.3 (16.67\cdot H) + \Delta\Big)
-   \]
-   \[
-   \Delta = 15 \cdot \frac{N*{crit}}{N*{total}} + 8 \cdot \frac{N*{alto}}{N*{total}}
+   P\_{\text{log}} = \frac{1}{1 + e^{-z}} \times 100
    \]
 
-Esses valores alimentam o relatório da página “Análise Preditiva” e os painéis do dashboard.
+   - \(T\): temperatura °C
+   - \(U\): umidade relativa %
+   - \(F\): nível de fumaça %
+   - \(V\): velocidade do vento km/h
+   - \(S\): fator sazonal
+
+4. **Ensemble final**
+   \[
+   P*{\text{final}} = \min\Big(100,\;0.4 P*{\text{log}} + 0.3 (10 \cdot FWI) + 0.3 (16.67 \cdot H) + \Delta\Big)
+   \]
+   \[
+   \Delta = 15 \cdot \frac{N*{\text{crit}}}{N*{\text{total}}} + 8 \cdot \frac{N*{\text{alto}}}{N*{\text{total}}}
+   \]
+
+O resultado alimenta a página **Análise Preditiva** e o **dashboard**.
 
 </details>
 
 ---
 
-## 🏗️ Arquitetura
+## ⚙️ Arquitetura & Stack
 
-### **Stack Tecnológico**
-
-- **Frontend**: React.js + TypeScript + Tailwind CSS
-- **Backend**: FastAPI + Python + SQLAlchemy
-- **Database**: PostgreSQL
-- **IA**: NumPy + SciPy (modelos científicos)
-- **Deploy**: Docker + Docker Compose
-
-### **Arquitetura Limpa**
-
-```
-Frontend (React) ←→ Backend (FastAPI) ←→ Database (PostgreSQL)
-                         ↓
-                    AI Engine (Python)
-```
+- **Frontend:** Next.js 14 (App Router), React 18, Tailwind CSS, React Query
+- **Backend:** FastAPI, SQLAlchemy, Pydantic
+- **IA:** NumPy, SciPy, modelos físicos (FWI/Haines) + regressão logística
+- **Banco:** PostgreSQL 15
+- **Infra:** Docker Compose, scripts `start.sh` / `stop.sh`
 
 ---
 
-## 🧮 Fórmula Matemática da IA
-
-### **Ensemble de Modelos Científicos**
-
-#### **1. Fire Weather Index (FWI) - Padrão Internacional**
-
-```
-FWI = 2.0 × ln(ISI + 1) + 0.45 × (BUI - 50)
-```
-
-#### **2. Índice Haines (Instabilidade Atmosférica)**
-
-```
-Haines = (T₈₅₀ - T₇₀₀) + (T₈₅₀ - Td₈₅₀)
-```
-
-#### **3. Modelo Logístico (Probabilidade)**
-
-```
-P(incêndio) = 1 / (1 + e^(-z))
-z = β₀ + β₁×Temp + β₂×Umidade + β₃×Fumaça + β₄×Vento + β₅×Sazonalidade
-```
-
-#### **Combinação Final (Ensemble)**
-
-```
-Probabilidade = 0.4×Logístico + 0.3×FWI + 0.3×Haines + Ajuste_Bayesiano
-```
-
----
-
-## 📡 API Endpoints
-
-### **Monitoramento**
-
-- `GET /api/v1/monitoring/points` - Listar pontos de monitoramento
-- `GET /api/v1/monitoring/stats` - Estatísticas gerais
-
-### **Predições**
-
-- `POST /api/v1/predictions/fire-risk` - Calcular risco de incêndio
-- `GET /api/v1/predictions/fire-risk/{regiao}` - Risco por região
-
-### **Alertas**
-
-- `GET /api/v1/alerts/` - Listar alertas
-- `PUT /api/v1/alerts/{id}/status` - Atualizar status
-
-### **Documentação**
-
-- `GET /docs` - Swagger UI (documentação interativa)
-
----
-
-## 🗄️ Estrutura do Projeto
+## 🗂️ Estrutura do projeto
 
 ```
 EcoBrasil/
-├── src/                      # React Frontend
-├── backend/                  # FastAPI Backend
-├── public/                   # Assets estáticos
-├── docs/                     # Documentação
-├── start.sh                  # Script de inicialização
-├── docker-compose.yml        # Orquestração
-└── README.md                # Este arquivo
+├── app/                # Rotas e páginas Next.js (App Router)
+├── components/         # UI e layout reutilizáveis
+├── lib/                # Clients, helpers e providers
+├── backend/            # API FastAPI + IA
+├── database/           # Seeds e CSVs de ingestão
+├── public/             # Assets estáticos do frontend
+├── start.sh / stop.sh  # Scripts para orquestração Docker
+├── docker-compose.yml  # Backend + PostgreSQL
+└── README.md
 ```
 
 ---
 
-## 🎯 Performance
+## 📡 Endpoints principais
 
-- ⚡ **Processamento Vetorizado** (NumPy)
-- 🚀 **API Assíncrona** (FastAPI)
-- 📊 **Cálculos Otimizados** (6-10x mais rápido)
-- 🔄 **Cache Inteligente**
+- `GET /api/v1/monitoring/points` — pontos monitorados
+- `GET /api/v1/monitoring/stats` — métricas agregadas
+- `POST /api/v1/predictions/fire-risk` — cálculo de risco
+- `GET /api/v1/alerts/` — alertas ativos
+- `PUT /api/v1/alerts/{id}/status` — atualizar status de alerta
+- `GET /docs` — documentação interativa (Swagger)
 
 ---
 
 ## 📄 Licença
 
-MIT License - Veja [LICENSE](LICENSE) para detalhes.
+Distribuído sob a **MIT License** — veja o arquivo [LICENSE](LICENSE).
 
 ---
 
-**EcoMonitor v2.0 - Arquitetura Moderna e IA Avançada** 🔥
+**EcoMonitor v2.0 — Arquitetura moderna com IA aplicada a riscos ambientais.** 🔥

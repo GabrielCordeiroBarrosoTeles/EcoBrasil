@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from 'react'
 
-import { cn } from "../../lib/utils"
+import { cn } from '../../lib/utils'
 
 export interface DialogProps {
   open: boolean
@@ -14,30 +14,25 @@ const DialogContext = React.createContext<{
   onOpenChange: (open: boolean) => void
 }>({
   open: false,
-  onOpenChange: () => {},
+  onOpenChange: () => {}
 })
 
-export function Dialog({
-  open,
-  onOpenChange,
-  children,
-  containerClassName,
-}: DialogProps) {
+export function Dialog({ open, onOpenChange, children, containerClassName }: DialogProps) {
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onOpenChange(false)
+      if (e.key === 'Escape') onOpenChange(false)
     }
 
     if (open) {
-      document.addEventListener("keydown", handleEscape)
-      document.body.style.overflow = "hidden"
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = ''
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape)
-      document.body.style.overflow = ""
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
     }
   }, [open, onOpenChange])
 
@@ -52,8 +47,8 @@ export function Dialog({
         />
         <div
           className={cn(
-            "relative z-50 w-full max-w-md animate-in zoom-in-95 fade-in duration-300",
-            containerClassName,
+            'relative z-50 w-full max-w-md animate-in zoom-in-95 fade-in duration-300',
+            containerClassName
           )}
         >
           {children}
@@ -69,8 +64,8 @@ export function DialogContent({ children, className, ...rest }: DialogContentPro
   return (
     <div
       className={cn(
-        "bg-white rounded-2xl shadow-2xl p-8 border border-slate-100 animate-in fade-in zoom-in-95 duration-300",
-        className,
+        'bg-white rounded-2xl shadow-2xl p-8 border border-slate-100 animate-in fade-in zoom-in-95 duration-300',
+        className
       )}
       {...rest}
     >
@@ -86,7 +81,7 @@ type DialogFooterProps = React.HTMLAttributes<HTMLDivElement>
 
 export function DialogHeader({ children, className, ...rest }: DialogHeaderProps) {
   return (
-    <div className={cn("mb-6", className)} {...rest}>
+    <div className={cn('mb-6', className)} {...rest}>
       {children}
     </div>
   )
@@ -94,19 +89,15 @@ export function DialogHeader({ children, className, ...rest }: DialogHeaderProps
 
 export function DialogTitle({ children, className, ...rest }: DialogTitleProps) {
   return (
-    <h2 className={cn("text-2xl font-bold text-slate-900", className)} {...rest}>
+    <h2 className={cn('text-2xl font-bold text-slate-900', className)} {...rest}>
       {children}
     </h2>
   )
 }
 
-export function DialogDescription({
-  children,
-  className,
-  ...rest
-}: DialogDescriptionProps) {
+export function DialogDescription({ children, className, ...rest }: DialogDescriptionProps) {
   return (
-    <p className={cn("text-slate-600 mt-3", className)} {...rest}>
+    <p className={cn('text-slate-600 mt-3', className)} {...rest}>
       {children}
     </p>
   )
@@ -114,7 +105,7 @@ export function DialogDescription({
 
 export function DialogFooter({ children, className, ...rest }: DialogFooterProps) {
   return (
-    <div className={cn("flex gap-3 mt-8", className)} {...rest}>
+    <div className={cn('flex gap-3 mt-8', className)} {...rest}>
       {children}
     </div>
   )
