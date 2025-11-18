@@ -252,6 +252,14 @@ EcoBrasil/
 
 ---
 
+| Foto | Nome | GitHub |
+|------|------|--------|
+| <img src="https://avatars.githubusercontent.com/u/98492418?v=4" width="40" /> | **Gabriel Cordeiro** | [@GabrielCordeiroBarrosoTeles](https://github.com/GabrielCordeiroBarrosoTeles) |
+| <img src="https://avatars.githubusercontent.com/u/196086011?v=4" width="40" /> | **Rondney** | [@Rondney](https://github.com/Rondney1978) |
+| <img src="https://avatars.githubusercontent.com/u/197073441?v=4" width="40" /> | **Pedro Paulo** | [@Pedro Paulo](https://github.com/ZecaBigodinho) |
+| <img src="https://avatars.githubusercontent.com/u/131547815?v=4" width="40" /> | **Gabri1lly** | [@Gabri1lly3](https://github.com/Gabri1lly) |
+| <img src="https://avatars.githubusercontent.com/u/129917521?v=4" width="40" /> | **Guilherme** | [@Guilherme](https://github.com/Gui-rc) |
+
 ## 📄 Licença
 
 Distribuído sob a **MIT License** — veja o arquivo [LICENSE](LICENSE).
