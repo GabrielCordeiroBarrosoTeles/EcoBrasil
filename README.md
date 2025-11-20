@@ -129,45 +129,88 @@ flowchart LR
 
 ### 1. Fire Weather Index (FWI)
 
-![FWI](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}FWI%20=%202.0%20\cdot%20\ln(ISI%20+%201)%20+%200.45%20\cdot%20(BUI%20-%2050))
+O FWI segue o padrão canadense de combate a incêndios e utiliza três sub‑índices:
 
-- `ISI`: depende da velocidade do vento  
-- `BUI`: combina umidade e temperatura (FFMC, DMC, DC)
+- **FFMC** (Fine Fuel Moisture Code) → sensibilidade do material fino:  
+  `FFMC = 85 + 0.0365 × temperatura − 0.0365 × umidade` (limitado a 0‒101)
+- **DMC** (Duff Moisture Code) → umidade de camada intermediária:  
+  `DMC = max(0, 20 + 0.5 × temperatura − 0.2 × umidade)`
+- **DC** (Drought Code) → seca de longo prazo:  
+  `DC = max(0, 50 + 0.8 × temperatura − 0.3 × umidade)`
 
----
+Com esses componentes o motor calcula:
+
+$$
+ISI = 0.208 \cdot FFMC \cdot \left(1 + \frac{vento}{10}\right)
+$$
+
+$$
+BUI = \frac{0.8 \cdot DMC \cdot DC}{DMC + 0.4 \cdot DC}
+$$
+
+$$
+FWI =
+\begin{cases}
+2.0 \cdot \ln(ISI + 1) + 0.45 \cdot (BUI - 50), & \text{se } BUI \leq 80 \\
+2.0 \cdot \ln(ISI + 1) + 0.45 \cdot (BUI - 50) + 0.1 \cdot (BUI - 80), & \text{caso contrário}
+\end{cases}
+$$
 
 ### 2. Índice Haines
 
-![Haines](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}H%20=%20(T_{850}%20-%20T_{700})%20+%20(T_{850}%20-%20T_{d,850}))
+O índice Haines captura instabilidade atmosférica em níveis médios, combinando gradiente térmico e déficit de umidade:
 
-Mede a instabilidade atmosférica em níveis médios.
+$$
+H = (T_{850} - T_{700}) + (T_{850} - T_{d,850})
+$$
 
----
+- \(T\_{850}\): temperatura simulada a 850 hPa (usamos temperatura de superfície)
+- \(T*{700}\): temperatura aproximada a 700 hPa (`T*{850} - 10`)
+- \(T\_{d,850}\): temperatura de ponto de orvalho derivada da umidade relativa
+
+O resultado é truncado em \([0, 6]\), conforme a escala operacional do índice.
 
 ### 3. Modelo logístico sazonal
 
-![z](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}z%20=%20-2.5%20+%203.2\frac{T}{50}%20+%202.8(1-\frac{U}{100})%20+%201.5\frac{F}{100}%20+%200.8\frac{V}{30}%20+%201.2(S-1))
-  
-![Plog](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}P_{log}%20=%20\frac{1}{1%20+%20e^{-z}}%20\times%20100)
+Para capturar comportamentos regionais o backend normaliza cada variável de entrada:
 
-- `T`: temperatura (°C)  
-- `U`: umidade relativa (%)  
-- `F`: nível de fumaça (%)  
-- `V`: velocidade do vento (km/h)  
-- `S`: fator sazonal  
+- \(T_n = \frac{T}{50}\) — temperatura (°C) convertida para faixa 0‒1
+- \(U_n = 1 - \frac{U}{100}\) — risco associado à baixa umidade
+- \(F_n = \frac{F}{100}\) — nível de fumaça (0‒100%)
+- \(V_n = \frac{V}{30}\) — velocidade do vento (km/h) escalonada
+- \(S\) — fator sazonal tabelado (maior nas estações secas)
 
----
+A regressão logística calibrada produz:
 
-### 4. Ensemble final
+$$
+z = -2.5 + 3.2T_n + 2.8U_n + 1.5F_n + 0.8V_n + 1.2(S - 1)
+$$
 
-![Pfinal](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}P_{final}%20=%20\min(100,%200.4P_{log}%20+%200.3(10%20\cdot%20FWI)%20+%200.3(16.67%20\cdot%20H)%20+%20\Delta))
-  
-![Delta](https://latex.codecogs.com/svg.image?\bg{transparent}\color{white}\Delta%20=%2015%20\cdot%20\frac{N_{crit}}{N_{total}}%20+%208%20\cdot%20\frac{N_{alto}}{N_{total}})
+$$
+P_{\text{log}} = \frac{1}{1 + e^{-z}} \times 100
+$$
 
-Esses valores alimentam a página **Análise Preditiva** e o **Dashboard**.
+### 4. Ensemble e ajuste bayesiano
+
+O escore final combina os três modelos (ponderação empírica validada em dados históricos):
+
+$$
+P_{\text{ensemble}} = 0.4 P_{\text{log}} + 0.3 \min(100, 10 \cdot FWI) + 0.3 \min(100, 16.67 \cdot H)
+$$
+
+Em seguida é aplicado um ajuste por densidade de ocorrências críticas na região analisada:
+
+$$
+\Delta = 15 \cdot \frac{N_{\text{crit}}}{N_{\text{total}}} + 8 \cdot \frac{N_{\text{alto}}}{N_{\text{total}}}
+$$
+
+$$
+P_{\text{final}} = \min\left(100,\; P_{\text{ensemble}} + \Delta\right)
+$$
+
+Esse valor é exposto na API e alimenta o dashboard, sempre acompanhado dos componentes médios (`fwi_medio`, `haines_medio`, `ensemble_score`) retornados pelo endpoint `/predictions/fire-risk`.
 
 </details>
-
 
 ---
 
